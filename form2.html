@@ -1,4 +1,6 @@
-<head><script type="text/javascript">
+<head>
+
+<script type="text/javascript">
     /** This section is only needed once per page if manually copying **/
     if (typeof MauticSDKLoaded == 'undefined') {
         var MauticSDKLoaded = true;
@@ -18,10 +20,11 @@
         MauticSDK.onLoad();
     }
 </script>
+
+    
 </head>
 
-<body>
-  <style type="text/css" scoped>
+<body><style type="text/css" scoped>
     .mauticform_wrapper { max-width: 600px; margin: 10px auto; }
     .mauticform-innerform {}
     .mauticform-post-success {}
@@ -67,9 +70,9 @@
 <style type="text/css" scoped>
     .mauticform-field-hidden { display:none }
 </style>
-<div id="mauticform_wrapper_suscribitealnews" class="mauticform_wrapper">
-    <form autocomplete="false" role="form" method="post" action="https://mkt.radionube.online/form/submit?formId=1" id="mauticform_suscribitealnews" data-mautic-form="suscribitealnews" enctype="multipart/form-data"><div class="mauticform-error" id="mauticform_suscribitealnews_error"></div>
-            <div class="mauticform-message" id="mauticform_suscribitealnews_message"></div><div class="mauticform-innerform">
+<div id="mauticform_wrapper_pidomasdatos" class="mauticform_wrapper">
+    <form autocomplete="false" role="form" method="post" action="https://mkt.radionube.online/form/submit?formId=2" id="mauticform_pidomasdatos" data-mautic-form="pidomasdatos" enctype="multipart/form-data"><div class="mauticform-error" id="mauticform_pidomasdatos_error"></div>
+            <div class="mauticform-message" id="mauticform_pidomasdatos_message"></div><div class="mauticform-innerform">
             <div class="mauticform-page-wrapper mauticform-page-1" data-mautic-form-page="1">
                   
 
@@ -82,26 +85,110 @@
     
 
           
-<div id="mauticform_suscribitealnews_email" class="mauticform-row mauticform-email mauticform-field-1 mauticform-required" data-validate="email" data-validation-type="email">
-  <label id="mauticform_label_suscribitealnews_email" for="mauticform_input_suscribitealnews_email" class="mauticform-label">Email</label>
+<div id="mauticform_pidomasdatos_nombre" class="mauticform-row mauticform-text mauticform-field-1 mauticform-required" data-validate="nombre" data-validation-type="text">
+  <label id="mauticform_label_pidomasdatos_nombre" for="mauticform_input_pidomasdatos_nombre" class="mauticform-label">Nombre</label>
   
-      <input type="email" name="mauticform[email]" value="" id="mauticform_input_suscribitealnews_email" class="mauticform-input">
+      <input type="text" name="mauticform[nombre]" value="" id="mauticform_input_pidomasdatos_nombre" class="mauticform-input">
   
-  <span class="mauticform-errormsg" style="display:none;">Correo no valido</span>
+  <span class="mauticform-errormsg" style="display:none;">Digame su nombre por favor</span>
 </div>
+                  
+
+
+      
+
+
+
+    
+
+
+                        
+    
+
+<div id="mauticform_pidomasdatos_tiene_experiencia" class="mauticform-row mauticform-radiogrp mauticform-field-2">
+          <label class="mauticform-label" for="mauticform_radiogrp_radio_tiene_experiencia_No1">Tiene experiencia en Radio ?</label>
+    
+                  
+    <div class="mauticform-radiogrp-row">
+    <input name="mauticform[tiene_experiencia]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_tiene_experiencia_No0" type="radio" value="No">
+        <label class="mauticform-radiogrp-label" id="mauticform_radiogrp_label_tiene_experiencia_No0" for="mauticform_radiogrp_radio_tiene_experiencia_No0">No</label>
+
+    </div>                  
+    <div class="mauticform-radiogrp-row">
+    <input name="mauticform[tiene_experiencia]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_tiene_experiencia_Online1" type="radio" value="Online">
+        <label class="mauticform-radiogrp-label" id="mauticform_radiogrp_label_tiene_experiencia_Online1" for="mauticform_radiogrp_radio_tiene_experiencia_Online1">Online</label>
+
+    </div>                  
+    <div class="mauticform-radiogrp-row">
+    <input name="mauticform[tiene_experiencia]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_tiene_experiencia_Fm2" type="radio" value="Fm">
+        <label class="mauticform-radiogrp-label" id="mauticform_radiogrp_label_tiene_experiencia_Fm2" for="mauticform_radiogrp_radio_tiene_experiencia_Fm2">FM</label>
+
+    </div>                  
+    <div class="mauticform-radiogrp-row">
+    <input name="mauticform[tiene_experiencia]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_tiene_experiencia_Locutor3" type="radio" value="Locutor">
+        <label class="mauticform-radiogrp-label" id="mauticform_radiogrp_label_tiene_experiencia_Locutor3" for="mauticform_radiogrp_radio_tiene_experiencia_Locutor3">Locutor</label>
+
+    </div>                  
+    <div class="mauticform-radiogrp-row">
+    <input name="mauticform[tiene_experiencia]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_tiene_experiencia_Super4" type="radio" value="Super">
+        <label class="mauticform-radiogrp-label" id="mauticform_radiogrp_label_tiene_experiencia_Super4" for="mauticform_radiogrp_radio_tiene_experiencia_Super4">Otras</label>
+
+    </div>  
+  <span class="mauticform-errormsg" style="display:none;"></span>
+</div>
+
+                  
+
+
+      
+
+
+
+    
+
+                    
+                        
+    
+
+<div id="mauticform_pidomasdatos_tipo_de_radio1" class="mauticform-row mauticform-radiogrp mauticform-field-3 mauticform-required" data-validate="tipo_de_radio1" data-validation-type="radiogrp">
+          <label class="mauticform-label" for="mauticform_radiogrp_radio_tipo_de_radio1_Variada1">Tipo de Radio?</label>
+    
+                  
+    <div class="mauticform-radiogrp-row">
+    <input name="mauticform[tipo_de_radio1]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_tipo_de_radio1_Variada0" type="radio" value="Variada">
+        <label class="mauticform-radiogrp-label" id="mauticform_radiogrp_label_tipo_de_radio1_Variada0" for="mauticform_radiogrp_radio_tipo_de_radio1_Variada0">Variada</label>
+
+    </div>                  
+    <div class="mauticform-radiogrp-row">
+    <input name="mauticform[tipo_de_radio1]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_tipo_de_radio1_Religiosa1" type="radio" value="Religiosa">
+        <label class="mauticform-radiogrp-label" id="mauticform_radiogrp_label_tipo_de_radio1_Religiosa1" for="mauticform_radiogrp_radio_tipo_de_radio1_Religiosa1">Religiosa</label>
+
+    </div>                  
+    <div class="mauticform-radiogrp-row">
+    <input name="mauticform[tipo_de_radio1]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_tipo_de_radio1_Musical2" type="radio" value="Musical">
+        <label class="mauticform-radiogrp-label" id="mauticform_radiogrp_label_tipo_de_radio1_Musical2" for="mauticform_radiogrp_radio_tipo_de_radio1_Musical2">Musical</label>
+
+    </div>                  
+    <div class="mauticform-radiogrp-row">
+    <input name="mauticform[tipo_de_radio1]" class="mauticform-radiogrp-radio" id="mauticform_radiogrp_radio_tipo_de_radio1_Noticias3" type="radio" value="Noticias">
+        <label class="mauticform-radiogrp-label" id="mauticform_radiogrp_label_tipo_de_radio1_Noticias3" for="mauticform_radiogrp_radio_tipo_de_radio1_Noticias3">Noticias</label>
+
+    </div>  
+  <span class="mauticform-errormsg" style="display:none;">Es obligatorio</span>
+</div>
+
                   
       
   
     
     
-<div id="mauticform_suscribitealnews_submit" class="mauticform-row mauticform-button-wrapper mauticform-field-2">
-  <button class="btn btn-ghost mauticform-button" name="mauticform[submit]" value="1" id="mauticform_input_suscribitealnews_submit" type="submit">Enviar</button>
+<div id="mauticform_pidomasdatos_submit" class="mauticform-row mauticform-button-wrapper mauticform-field-4">
+  <button class="btn btn-ghost mauticform-button" name="mauticform[submit]" value="1" id="mauticform_input_pidomasdatos_submit" type="submit">Enviar</button>
 </div>
-                  </div></div><input type="hidden" name="mauticform[formId]" id="mauticform_suscribitealnews_id" value="1">
-        <input type="hidden" name="mauticform[return]" id="mauticform_suscribitealnews_return" value="">
-        <input type="hidden" name="mauticform[formName]" id="mauticform_suscribitealnews_name" value="suscribitealnews">
+                  </div></div><input type="hidden" name="mauticform[formId]" id="mauticform_pidomasdatos_id" value="2">
+        <input type="hidden" name="mauticform[return]" id="mauticform_pidomasdatos_return" value="">
+        <input type="hidden" name="mauticform[formName]" id="mauticform_pidomasdatos_name" value="pidomasdatos">
         
     </form>
 </div>
-
 </body>
