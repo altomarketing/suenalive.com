@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar audios para el locutor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: url('https://images.pexels.com/photos/7991485/pexels-photo-7991485.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+        textarea:focus, select:focus, input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px #bfdbfe;
+            outline: none;
+        }
+        audio {
+            width: 100%;
+            max-width: 250px;
+            height: 40px;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-3xl mx-auto p-6 md:p-8 bg-white rounded-xl shadow-lg">
+        
+        <header class="mb-6">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Enviar audios para el locutor</h1>
+            <p class="text-gray-500 mt-1">Usa nuestras herramientas de IA o escribe directamente tu guion.</p>
+        </header>
+
+        <form id="text-form">
+            <!-- NUEVA SECCIÓN: Generación de Guion con IA -->
+            <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <label for="ai-prompt-input" class="block text-sm font-medium text-gray-800 mb-2">Creación de Guion con IA</label>
+                <p class="text-xs text-gray-600 mb-2">¿Sin ideas? Describe tu producto o servicio y la IA creará un guion para ti.</p>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="ai-prompt-input" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Ej: Anuncio para una nueva cafetería en Palermo">
+                    <button type="button" id="generate-script-btn" class="flex-shrink-0 flex items-center justify-center gap-2 bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="generate-btn-text">✨ Generar Guion</span>
+                        <div id="generate-loader" class="loader hidden"></div>
+                    </button>
+                </div>
+                <p id="generate-api-error" class="text-red-500 text-xs mt-1 hidden"></p>
+            </div>
+
+            <!-- Área de texto y contador -->
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="relative w-full">
+                    <div class="flex justify-between items-center mb-1">
+                        <label for="text-input" class="block text-sm font-medium text-gray-700">Tu guion:</label>
+                        <button type="button" id="improve-text-btn" class="flex items-center gap-2 text-sm bg-gray-200 text-gray-800 font-semibold py-1 px-3 rounded-full hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span id="improve-btn-text">🔧 Mejorar Guion</span>
+                            <div id="improve-loader" class="loader hidden"></div>
+                        </button>
+                    </div>
+                    <textarea id="text-input" rows="8" class="w-full p-4 border border-gray-300 rounded-lg" placeholder="Tu guion aparecerá aquí..."></textarea>
+                    <p id="improve-api-error" class="text-red-500 text-xs mt-1 hidden"></p>
+                </div>
+                <div class="hidden md:flex flex-col items-center justify-start pt-12 w-32">
+                    <div id="word-count-side" class="text-lg font-medium text-gray-700">0</div>
+                    <div class="text-sm text-gray-500">palabras</div>
+                </div>
+            </div>
+
+            <!-- Selector de Locutor -->
+            <div class="mt-6">
+                <label for="locutor-select" class="block text-sm font-medium text-gray-700 mb-2">1. Elige un locutor:</label>
+                <div class="flex flex-col sm:flex-row items-center gap-4">
+                    <select id="locutor-select" class="w-full sm:w-1/2 p-2 border border-gray-300 rounded-lg"></select>
+                    <audio id="locutor-audio-player" controls class="mt-2 sm:mt-0">
+                        Tu navegador no soporta el elemento de audio.
+                    </audio>
+                </div>
+            </div>
+
+            <!-- Resumen de costos -->
+            <div class="mt-6 p-5 bg-gray-50 border border-gray-200 rounded-lg">
+                <h2 class="text-lg font-semibold text-gray-800 mb-3">2. Resumen del Pedido</h2>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center text-gray-700">
+                        <span>Cantidad de palabras:</span>
+                        <span id="word-count-summary" class="font-bold text-lg">0</span>
+                    </div>
+                    <div class="flex justify-between items-center text-gray-700">
+                        <span>Precio estimado:</span>
+                        <span class="font-bold text-lg text-blue-600">$<span id="price-display">0.00</span> USD</span>
+                    </div>
+                </div>
+                 <p class="text-xs text-gray-500 mt-3">*Costo del audio EN OFF $9.00 USD y luego $5.00 USD por cada bloque de extra de 30 palabras.</p>
+            </div>
+
+            <!-- Botón de Confirmar -->
+            <div class="mt-8">
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
+                    Confirmar y Enviar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const locutores = [
+            { nombre: "Agustin", audioSrc: "https://serviciostreaming.com/f/audios/FLASH_01.mp3" },
+            { nombre: "Agustin Lopez", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { nombre: "Carlos Arturo", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+            { nombre: "Victor Hugo", audioSrc: "https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3" },
+            { nombre: "Juan Guzman", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }
+        ];
+
+        const textarea = document.getElementById('text-input');
+        const wordCountSide = document.getElementById('word-count-side').firstChild;
+        const wordCountSummary = document.getElementById('word-count-summary');
+        const priceDisplay = document.getElementById('price-display');
+        const form = document.getElementById('text-form');
+        const locutorSelect = document.getElementById('locutor-select');
+        const audioPlayer = document.getElementById('locutor-audio-player');
+        
+        // Elementos de IA para Mejorar Texto
+        const improveTextBtn = document.getElementById('improve-text-btn');
+        const improveLoader = document.getElementById('improve-loader');
+        const improveBtnText = document.getElementById('improve-btn-text');
+        const improveApiError = document.getElementById('improve-api-error');
+
+        // Elementos de IA para Generar Guion
+        const generateScriptBtn = document.getElementById('generate-script-btn');
+        const aiPromptInput = document.getElementById('ai-prompt-input');
+        const generateLoader = document.getElementById('generate-loader');
+        const generateBtnText = document.getElementById('generate-btn-text');
+        const generateApiError = document.getElementById('generate-api-error');
+
+        const COSTO_BASE = 9;
+        const PRECIO_POR_BLOQUE = 5;
+        const PALABRAS_POR_BLOQUE = 30;
+
+        function actualizarContadores() {
+            const texto = textarea.value.trim();
+            const palabras = texto === '' ? 0 : texto.split(/\s+/).length;
+            let costo = 0;
+            if (palabras > 0) {
+                const costoBloques = Math.ceil(palabras / PALABRAS_POR_BLOQUE) * PRECIO_POR_BLOQUE;
+                costo = COSTO_BASE + costoBloques;
+            }
+            wordCountSide.nodeValue = palabras;
+            wordCountSummary.textContent = palabras;
+            priceDisplay.textContent = costo.toFixed(2);
+        }
+
+        function popularLocutores() {
+            locutores.forEach(locutor => {
+                const option = document.createElement('option');
+                option.value = locutor.audioSrc;
+                option.textContent = locutor.nombre;
+                locutorSelect.appendChild(option);
+            });
+        }
+
+        function actualizarAudio() {
+            audioPlayer.src = locutorSelect.value;
+            audioPlayer.load(); 
+        }
+
+        async function callGeminiAPI(prompt) {
+            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error de la API: ${response.statusText}`);
+            }
+            
+            const result = await response.json();
+
+            if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                return result.candidates[0].content.parts[0].text;
+            } else {
+                throw new Error('La respuesta de la API no tuvo el formato esperado.');
+            }
+        }
+
+        async function handleGenerateScript() {
+            const userPrompt = aiPromptInput.value;
+            if (userPrompt.trim().length < 5) {
+                generateApiError.textContent = 'Por favor, describe tu idea con más detalle.';
+                generateApiError.classList.remove('hidden');
+                return;
+            }
+
+            generateScriptBtn.disabled = true;
+            generateLoader.classList.remove('hidden');
+            generateBtnText.textContent = 'Generando...';
+            generateApiError.classList.add('hidden');
+
+            const fullPrompt = `Eres un guionista publicitario experto. Escribe un guion corto y efectivo para un anuncio de radio de unos 30 segundos sobre el siguiente tema: "${userPrompt}". El tono debe ser profesional y atractivo. Devuelve únicamente el texto del guion, sin añadir introducciones ni títulos.`;
+
+            try {
+                const generatedScript = await callGeminiAPI(fullPrompt);
+                textarea.value = generatedScript.trim();
+                actualizarContadores();
+            } catch (error) {
+                console.error('Error al generar guion:', error);
+                generateApiError.textContent = 'No se pudo generar el guion. Inténtalo de nuevo.';
+                generateApiError.classList.remove('hidden');
+            } finally {
+                generateScriptBtn.disabled = false;
+                generateLoader.classList.add('hidden');
+                generateBtnText.textContent = '✨ Generar Guion';
+            }
+        }
+
+        async function handleImproveText() {
+            const originalText = textarea.value;
+            if (originalText.trim().length < 5) {
+                improveApiError.textContent = 'Por favor, escribe un texto más largo para mejorar.';
+                improveApiError.classList.remove('hidden');
+                return;
+            }
+
+            improveTextBtn.disabled = true;
+            improveLoader.classList.remove('hidden');
+            improveBtnText.textContent = 'Mejorando...';
+            improveApiError.classList.add('hidden');
+
+            const fullPrompt = `Eres un experto en redacción de guiones para locución. Revisa y mejora el siguiente texto para que sea más claro, impactante y profesional. Corrige cualquier error gramatical u ortográfico. Devuelve únicamente el texto mejorado, sin añadir explicaciones ni encabezados. Texto a mejorar: "${originalText}"`;
+
+            try {
+                const improvedText = await callGeminiAPI(fullPrompt);
+                textarea.value = improvedText.trim();
+                actualizarContadores();
+            } catch (error)
+            {
+                console.error('Error al mejorar texto:', error);
+                improveApiError.textContent = 'No se pudo mejorar el texto. Inténtalo de nuevo.';
+                improveApiError.classList.remove('hidden');
+            } finally {
+                improveTextBtn.disabled = false;
+                improveLoader.classList.add('hidden');
+                improveBtnText.textContent = '🔧 Mejorar Guion';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            popularLocutores();
+            actualizarAudio();
+            actualizarContadores();
+        });
+
+        textarea.addEventListener('input', actualizarContadores);
+        locutorSelect.addEventListener('change', actualizarAudio);
+        generateScriptBtn.addEventListener('click', handleGenerateScript);
+        improveTextBtn.addEventListener('click', handleImproveText);
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const locutorSeleccionado = locutorSelect.options[locutorSelect.selectedIndex].text;
+            const modalMessage = `Formulario listo para ser enviado.\nLocutor: ${locutorSeleccionado}\nTotal a pagar: $${priceDisplay.textContent}`;
+            alert(modalMessage);
+        });
+    </script>
+</body>
+</html>
